@@ -1,5 +1,6 @@
 "use client";
 
+import axios from "axios";
 import React from "react";
 
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -19,10 +20,25 @@ function RegisterForm() {
 		handleSubmit,
 		watch,
 		formState: { errors },
+		reset,
 	} = useForm<Inputs>();
 
-	const OnSubmit: SubmitHandler<Inputs> = (data) => {
-		console.log(data);
+	const API_URL = String(process.env.NEXT_PUBLIC_API_URL);
+
+	const OnSubmit: SubmitHandler<Inputs> = async (data) => {
+		try {
+			const result = await axios.post(`${API_URL}/api/v1/accounts/register`, {
+				given_name: data.givenName,
+				middle_name: data.middleName,
+				last_name: data.lastName,
+				username: data.username,
+				password: data.password,
+			});
+
+			console.log(result);
+
+			reset();
+		} catch (err) {}
 	};
 
 	console.log(errors);
@@ -32,12 +48,12 @@ function RegisterForm() {
 	return (
 		<form
 			onSubmit={handleSubmit(OnSubmit)}
-			className="flex flex-col max-w-[30rem] w-full justify-center items-center gap-4 mt-4"
+			className="flex flex-col max-w-[30rem] w-full justify-center items-center gap-2 mt-4"
 		>
 			{/* Given Name */}
 			<section className="w-full">
 				<label
-					className="label label-text text-lg font-semibold"
+					className="label label-text text-base font-semibold"
 					htmlFor="given-name"
 				>
 					Given Name
@@ -61,7 +77,7 @@ function RegisterForm() {
 			{/* Middle Name */}
 			<section className="w-full">
 				<label
-					className="label label-text text-lg font-semibold"
+					className="label label-text text-base font-semibold"
 					htmlFor="middle-name"
 				>
 					Middle Name
@@ -85,7 +101,7 @@ function RegisterForm() {
 			{/* Last Name */}
 			<section className="w-full">
 				<label
-					className="label label-text text-lg font-semibold"
+					className="label label-text text-base font-semibold"
 					htmlFor="last-name"
 				>
 					Last Name
@@ -110,7 +126,7 @@ function RegisterForm() {
 			{/* Username Field */}
 			<section className="w-full">
 				<label
-					className="label label-text text-lg font-semibold"
+					className="label label-text text-base font-semibold"
 					htmlFor="username"
 				>
 					Username
@@ -138,7 +154,7 @@ function RegisterForm() {
 			{/* Password Field */}
 			<section className="w-full">
 				<label
-					className="label label-text text-lg font-semibold"
+					className="label label-text text-base font-semibold"
 					htmlFor="password"
 				>
 					Password
@@ -166,7 +182,7 @@ function RegisterForm() {
 			{/* Confirm Password Field */}
 			<section className="w-full">
 				<label
-					className="label label-text text-lg font-semibold"
+					className="label label-text text-base font-semibold"
 					htmlFor="password"
 				>
 					Confirm your password
