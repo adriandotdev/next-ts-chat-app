@@ -6,7 +6,11 @@ interface ChatContextType {
 	chatProfiles: any[];
 }
 
-const ChatContext = createContext<ChatContextType | undefined>(undefined);
+const ChatContext = createContext<ChatContextType>({
+	selectedChat: null,
+	setSelectedChat: () => {}, // Empty function as default
+	chatProfiles: [],
+});
 
 export const ChatProvider = ({ children }: { children?: React.ReactNode }) => {
 	// Current user logged in. In this state, the info of the user is being set.
