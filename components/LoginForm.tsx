@@ -3,6 +3,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { LoginInput } from "@/types/Inputs";
 import axios, { AxiosError } from "axios";
 import Response from "@/types/Response";
+
 function LoginForm() {
 	const {
 		register,
@@ -17,10 +18,14 @@ function LoginForm() {
 
 	const Login: SubmitHandler<LoginInput> = async (data) => {
 		try {
-			const result = await axios.post(`${API_URL}/api/v1/accounts/login`, {
-				username: data.username,
-				password: data.password,
-			});
+			const result = await axios.post(
+				`/api/v1/accounts/login`,
+				{
+					username: data.username,
+					password: data.password,
+				},
+				{ withCredentials: true, baseURL: API_URL }
+			);
 
 			if (result.status === 200) {
 				reset();
