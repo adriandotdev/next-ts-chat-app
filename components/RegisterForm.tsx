@@ -1,6 +1,7 @@
 "use client";
 
-import axios from "axios";
+import Response from "@/types/Response";
+import axios, { AxiosError } from "axios";
 import React from "react";
 
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -19,8 +20,10 @@ function RegisterForm() {
 		register,
 		handleSubmit,
 		watch,
-		formState: { errors },
+		setError,
+		formState: { errors, isSubmitting },
 		reset,
+		setFocus,
 	} = useForm<Inputs>();
 
 	const API_URL = String(process.env.NEXT_PUBLIC_API_URL);
@@ -35,10 +38,19 @@ function RegisterForm() {
 				password: data.password,
 			});
 
-			console.log(result);
-
 			reset();
-		} catch (err) {}
+		} catch (err) {
+			let error = err as AxiosError;
+
+			let data = error.response?.data as Response;
+
+			if (data.message === "USERNAME_EXISTS") {
+				setError("username", { message: "Username already exists" });
+				setFocus("username", { shouldSelect: true });
+
+				alert("Username exists");
+			}
+		}
 	};
 
 	console.log(errors);
@@ -204,11 +216,9 @@ function RegisterForm() {
 				</small>
 			</section>
 
-			<input
-				type="submit"
-				value="Login"
-				className="btn btn-primary w-full mt-3"
-			/>
+			<button className="btn btn-primary w-full mt-3">
+				{isSubmitting ? "Loading..." : "Sign Up"}
+			</button>
 		</form>
 	);
 }
