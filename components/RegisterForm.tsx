@@ -5,17 +5,9 @@ import axios, { AxiosError } from "axios";
 import React from "react";
 
 import { useForm, SubmitHandler } from "react-hook-form";
+import { SignUpInput } from "@/types/Inputs";
 
 function RegisterForm() {
-	type Inputs = {
-		givenName: string;
-		middleName: string;
-		lastName: string;
-		username: string;
-		password: string;
-		confirmPassword: string;
-	};
-
 	const {
 		register,
 		handleSubmit,
@@ -24,11 +16,11 @@ function RegisterForm() {
 		formState: { errors, isSubmitting },
 		reset,
 		setFocus,
-	} = useForm<Inputs>();
+	} = useForm<SignUpInput>();
 
 	const API_URL = String(process.env.NEXT_PUBLIC_API_URL);
 
-	const OnSubmit: SubmitHandler<Inputs> = async (data) => {
+	const OnSubmit: SubmitHandler<SignUpInput> = async (data) => {
 		try {
 			const result = await axios.post(`${API_URL}/api/v1/accounts/register`, {
 				given_name: data.givenName,
