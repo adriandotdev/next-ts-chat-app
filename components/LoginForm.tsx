@@ -3,8 +3,10 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { LoginInput } from "@/types/Inputs";
 import axios, { AxiosError } from "axios";
 import Response from "@/types/Response";
+import { useRouter } from "next/navigation";
 
 function LoginForm() {
+	const router = useRouter();
 	const {
 		register,
 		handleSubmit,
@@ -28,7 +30,9 @@ function LoginForm() {
 			);
 
 			if (result.status === 200) {
+				console.log(result);
 				reset();
+				router.push("/chats");
 			}
 
 			console.log(result);
